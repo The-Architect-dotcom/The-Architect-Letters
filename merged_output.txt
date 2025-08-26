@@ -1,0 +1,133 @@
+--- Merged Files Compilation ---
+Source Directory: C:\Users\RYZEN\AppData\Roaming\Mozilla\Firefox\Profiles\4q2vvwfy.default-release\chrome
+Generated on: 2025-08-26 14:09:21
+================================================================================
+
+--- START: merged_output.txt ---
+--------------------------------------------------------------------------------
+Directory tree for: C:\Users\RYZEN\AppData\Roaming\Mozilla\Firefox\Profiles\4q2vvwfy.default-release\chrome
+================================================================================
+├── css
+├── sidebar-nav.js
+├── sidebarNav.uc.js
+├── userChrome.css
+├── userChrome.js
+└── utils
+    └── SubScriptLoader.jsm
+--------------------------------------------------------------------------------
+--- END: merged_output.txt ---
+
+
+--- START: sidebar-nav.js ---
+--------------------------------------------------------------------------------
+// Sidebar navigation buttons
+(function() {
+  function goBack() {
+    try {
+      document.getElementById("sidebar").contentWindow.history.back();
+    } catch(e) { console.error("Back failed", e); }
+  }
+  function goForward() {
+    try {
+      document.getElementById("sidebar").contentWindow.history.forward();
+    } catch(e) { console.error("Forward failed", e); }
+  }
+
+  let header = document.getElementById("sidebar-header");
+  if (!header) return;
+
+  if (!document.getElementById("sidebar-back")) {
+    let backBtn = document.createElement("button");
+    backBtn.id = "sidebar-back";
+    backBtn.onclick = goBack;
+    header.appendChild(backBtn);
+  }
+
+  if (!document.getElementById("sidebar-forward")) {
+    let forwardBtn = document.createElement("button");
+    forwardBtn.id = "sidebar-forward";
+    forwardBtn.onclick = goForward;
+    header.appendChild(forwardBtn);
+  }
+})();
+
+--------------------------------------------------------------------------------
+--- END: sidebar-nav.js ---
+
+
+--- START: sidebarNav.uc.js ---
+--------------------------------------------------------------------------------
+// ==UserScript==
+// @name          Sidebar Navigation Buttons
+// @description   Adds Next/Back buttons to the Firefox sidebar
+// @include       main
+// ==/UserScript==
+
+(function() {
+  let sidebar = document.getElementById("sidebar-header");
+  if (!sidebar) return;
+
+  let btnBack = document.createXULElement("toolbarbutton");
+  btnBack.setAttribute("label", "◀ Back");
+  btnBack.onclick = () => SidebarUI.show("viewBookmarksSidebar");
+
+  let btnNext = document.createXULElement("toolbarbutton");
+  btnNext.setAttribute("label", "Next ▶");
+  btnNext.onclick = () => SidebarUI.show("viewHistorySidebar");
+
+  sidebar.appendChild(btnBack);
+  sidebar.appendChild(btnNext);
+})();
+
+--------------------------------------------------------------------------------
+--- END: sidebarNav.uc.js ---
+
+
+--- START: userChrome.css ---
+--------------------------------------------------------------------------------
+/* Style for Sidebar Nav Buttons */
+#sidebar-header toolbarbutton {
+  margin: 0 2px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: #2e2e2e;
+  color: white;
+  font-size: 12px;
+}
+#sidebar-header toolbarbutton:hover {
+  background: #444;
+}
+
+--------------------------------------------------------------------------------
+--- END: userChrome.css ---
+
+
+--- START: userChrome.js ---
+--------------------------------------------------------------------------------
+// Sidebar navigation buttons
+(function() {
+  function goBack() {
+    document.getElementById("sidebar").contentWindow.history.back();
+  }
+  function goForward() {
+    document.getElementById("sidebar").contentWindow.history.forward();
+  }
+
+  let header = document.getElementById("sidebar-header");
+
+  let backBtn = document.createElement("button");
+  backBtn.id = "sidebar-back";
+  backBtn.onclick = goBack;
+
+  let forwardBtn = document.createElement("button");
+  forwardBtn.id = "sidebar-forward";
+  forwardBtn.onclick = goForward;
+
+  header.appendChild(backBtn);
+  header.appendChild(forwardBtn);
+})();
+
+--------------------------------------------------------------------------------
+--- END: userChrome.js ---
+
+
