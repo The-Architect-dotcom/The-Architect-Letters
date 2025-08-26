@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌌 Nyra Elegant App Roadmap - Integrated Tree Structure</title>
+  <style>
+    :root {
+      --bg-primary: #0f1724;
+      --bg-secondary: #0b1220;
+      --text-primary: #e6eef6;
+      --text-muted: #9aa4b2;
+      --accent: #7dd3fc;
+      --accent-secondary: #60a5fa;
+      --glass: rgba(255,255,255,0.03);
+      --border: rgba(125,211,252,0.06);
+      --success: #10b981;
+      --warning: #f59e0b;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    html, body {
+      height: 100%;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: var(--text-primary);
+      background: linear-gradient(180deg, #071021 0%, #081226 60%, #0a1428 100%);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 24px;
+      background: linear-gradient(135deg, rgba(125,211,252,0.05), rgba(96,165,250,0.03));
+      border-radius: 16px;
+      border: 1px solid var(--border);
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header .subtitle {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      font-weight: 400;
+    }
+
+    .mission-context {
+      background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(16,185,129,0.03));
+      border: 1px solid rgba(16,185,129,0.2);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 32px;
+    }
+
+    .mission-context h3 {
+      color: var(--success);
+      margin-bottom: 12px;
+      font-size: 1.2rem;
+    }
+
+    .tree-structure {
+      display: grid;
+      gap: 16px;
+    }
+
+    .tree-node {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .tree-node:hover {
+      border-color: rgba(125,211,252,0.15);
+      box-shadow: 0 8px 32px rgba(2,6,23,0.4);
+    }
+
+    .node-header {
+      padding: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(135deg, rgba(255,255,255,0.02), transparent);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .node-header:hover {
+      background: linear-gradient(135deg, rgba(125,211,252,0.05), transparent);
+    }
+
+    .node-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .node-icon {
+      font-size: 1.4rem;
+      width: 32px;
+      text-align: center;
+    }
+
+    .expand-indicator {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      transition: transform 0.3s ease;
+    }
+
+    .tree-node[open] .expand-indicator {
+      transform: rotate(90deg);
+    }
+
+    .node-content {
+      padding: 0 20px 20px;
+    }
+
+    .node-description {
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      font-style: italic;
+      padding: 12px;
+      background: rgba(125,211,252,0.03);
+      border-radius: 8px;
+      border-left: 3px solid var(--accent);
+    }
+
+    .sub-categories {
+      display: grid;
+      gap: 12px;
+    }
+
+    .sub-category {
+      background: linear-gradient(90deg, rgba(125,211,252,0.03), transparent);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .sub-category h4 {
+      color: var(--accent);
+      margin-bottom: 8px;
+      font-size: 1rem;
+    }
+
+    .resource-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .resource-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.02);
+      border-radius: 6px;
+      font-size: 0.95rem;
+    }
+
+    .resource-link {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .resource-link:hover {
+      text-decoration: underline;
+      color: var(--accent-secondary);
+    }
+
+    .priority-tag {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-left: auto;
+    }
+
+    .priority-high {
+      background: rgba(239,68,68,0.2);
+      color: #fca5a5;
+    }
+
+    .priority-medium {
+      background: rgba(245,158,11,0.2);
+      color: #fcd34d;
+    }
+
+    .priority-low {
+      background: rgba(34,197,94,0.2);
+      color: #86efac;
+    }
+
+    .roadmap-steps {
+      counter-reset: step-counter;
+    }
+
+    .roadmap-step {
+      counter-increment: step-counter;
+      position: relative;
+      padding: 16px 16px 16px 50px;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, rgba(125,211,252,0.05), rgba(96,165,250,0.02));
+      border-radius: 8px;
+      border-left: 3px solid var(--accent);
+    }
+
+    .roadmap-step::before {
+      content: counter(step-counter);
+      position: absolute;
+      left: 16px;
+      top: 16px;
+      width: 24px;
+      height: 24px;
+      background: var(--accent);
+      color: #0f1724;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .columns {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .header h1 { font-size: 2rem; }
+      .columns { grid-template-columns: 1fr; }
+      .container { padding: 20px 16px; }
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+      color: #0f1724;
+    }
+
+    .btn-secondary {
+      background: rgba(125,211,252,0.1);
+      color: var(--accent);
+      border: 1px solid rgba(125,211,252,0.3);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(125,211,252,0.25);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header Section -->
+    <div class="header">
+      <h1>🌌 Nyra Elegant App Development Roadmap</h1>
+      <p class="subtitle">Complete Integrated Tree Structure for Android-First App Development & Monetization</p>
+    </div>
+
+    <!-- Mission Context -->
+    <div class="mission-context">
+      <h3>💡 Strategic Mission Context</h3>
+      <p>This roadmap serves as a practical income-generation pathway to fund your revolutionary 99-invention project. Focus on mainstream Android apps first to build reputation and funds, then expand to spiritual/halal applications once established. <strong>MashaAllah</strong> - every step towards financial freedom enables greater scientific discovery! 🚀</p>
+    </div>
+
+    <!-- Main Tree Structure -->
+    <div class="tree-structure">
+      
+      <!-- Goals & Strategy Node -->
+      <details class="tree-node" open>
+        <summary class="node-header">
+          <div class="node-title">
+            <span class="node-icon">🎯</span>
+            <span>Goals & Strategy</span>
+          </div>
+          <span class="expand-indicator">▶</span>
+        </summary>
+        <div class="node-content">
+          <div class="node-description">
+            Create mainstream Android apps first to earn sustainable income, then build halal/spiritual apps once you have reputation & funds. Android-first approach maximizes reach in Indonesian market.
+          </div>
+          <div class="sub-categories">
+            <div class="sub-category">
+              <h4>🚀 Launch & Discovery</h4>
+              <div class="resource-list">
+                <div class="resource-item">
+                  <a href="https://www.producthunt.com/" target="_blank" class="resource-link">Product Hunt</a> - Launch apps to tech audience
+                </div>
+                <div class="resource-item">
+                  <a href="https://www.indiehackers.com/" target="_blank" class="resource-link">Indie Hackers</a> - Learn from successful indie developers
+                </div>
+                <div class="resource-item">📱 Reddit communities (r/androidapps, r/androiddev)</div>
+                <div class="resource-item">🐦 Twitter developer community engagement</div>
+              </div>
+            </div>
+            <div class="sub-category">
+              <h4>📊 Growth & Analytics</h4>
+              <div class="resource-list">
+                <div class="resource-item">
+                  <a href="https://medium.com/topic/entrepreneurship" target="_blank" class="resource-link">Medium Entrepreneurship</a> - Share development journey
+                </div>
+                <div class="resource-item">📈 Google Analytics for Firebase - Track user behavior</div>
+                <div class="resource-item">💬 User feedback collection and iteration</div>
+                <div class="resource-item">📧 Email list building for app updates</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- Practical Implementation Roadmap Node -->
+      <details class="tree-node">
+        <summary class="node-header">
+          <div class="node-title">
+            <span class="node-icon">🗺️</span>
+            <span>Practical Implementation Roadmap</span>
+          </div>
+          <span class="expand-indicator">▶</span>
+        </summary>
+        <div class="node-content">
+          <div class="node-description">
+            Step-by-step practical roadmap to take you from complete beginner to published app developer earning sustainable income.
+          </div>
+          <div class="roadmap-steps">
+            <div class="roadmap-step">
+              <strong>Week 1-2: Foundation Setup</strong>
+              <br>Pick your first project: "Smart Utility Pack" with 4-5 core tools
+              <br>Set up development environment (Kodular or MIT App Inventor)
+              <br>Create basic wireframes and user flow
+            </div>
+            <div class="roadmap-step">
+              <strong>Week 3-4: MVP Development</strong>
+              <br>Build core functionality using drag-and-drop tools
+              <br>Focus on 2-3 essential features first
+              <br>Test on your own device extensively
+            </div>
+            <div class="roadmap-step">
+              <strong>Week 5: User Testing & Feedback</strong>
+              <br>Share with friends, family, and local community
+              <br>Collect feedback using Google Forms or built-in feedback
+              <br>Identify and fix critical usability issues
+            </div>
+            <div class="roadmap-step">
+              <strong>Week 6: Polish & Assets</strong>
+              <br>Design app icon and screenshots
+              <br>Write compelling store description
+              <br>Create privacy policy (use generators)
+              <br>Final testing and bug fixes
+            </div>
+            <div class="roadmap-step">
+              <strong>Week 7: Google Play Setup</strong>
+              <br>Register Google Play Console account ($25)
+              <br>Complete developer profile and verification
+              <br>Upload APK/AAB with all store assets
+              <br>Submit for review (2-3 days processing)
+            </div>
+            <div class="roadmap-step">
+              <strong>Week 8-12: Launch & Iterate</strong>
+              <br>Soft launch to gather initial reviews
+              <br>Implement user feedback and release updates
+              <br>Add "Pro" or "Support Developer" monetization
+              <br>Begin work on second app while maintaining first
+            </div>
+            <div class="roadmap-step">
+              <strong>Month 3-6: Scale & Expand</strong>
+              <br>Launch 2-3 more apps to build portfolio
+              <br>Cross-promote between your apps
+              <br>Consider migrating to Flutter for cross-platform
+              <br>Evaluate iOS expansion based on Android success
+            </div>
+            <div class="roadmap-step">
+              <strong>Month 6+: Sustainable Income</strong>
+              <br>Achieve $200-500/month from app portfolio
+              <br>Begin development of spiritual/halal apps
+              <br>Reinvest profits into your 99-invention research
+              <br>Consider advanced monetization (subscriptions, B2B)</br></br>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- Risk Management & Success Factors Node -->
+      <details class="tree-node">
+        <summary class="node-header">
+          <div class="node-title">
+            <span class="node-icon">⚖️</span>
+            <span>Risk Management & Success Factors</span>
+          </div>
+          <span class="expand-indicator">▶</span>
+        </summary>
+        <div class="node-content">
+          <div class="node-description">
+            Critical success factors and potential pitfalls to avoid. Learn from common mistakes and focus on what truly drives app success.
+          </div>
+          <div class="columns">
+            <div class="sub-category">
+              <h4>✅ Success Factors</h4>
+              <div class="resource-list">
+                <div class="resource-item">🎯 Solve a real, specific problem for users</div>
+                <div class="resource-item">⚡ Keep the app fast, simple, and intuitive</div>
+                <div class="resource-item">🔄 Release updates regularly based on feedback</div>
+                <div class="resource-item">💝 Provide excellent user support</div>
+                <div class="resource-item">📱 Maintain consistent visual design</div>
+                <div class="resource-item">🔒 Respect user privacy and data</div>
+              </div>
+            </div>
+            <div class="sub-category">
+              <h4>⚠️ Common Pitfalls to Avoid</h4>
+              <div class="resource-list">
+                <div class="resource-item">❌ Building too many features at once</div>
+                <div class="resource-item">❌ Ignoring user feedback and reviews</div>
+                <div class="resource-item">❌ Poor app store optimization (ASO)</div>
+                <div class="resource-item">❌ Competing in oversaturated markets</div>
+                <div class="resource-item">❌ Neglecting app performance and crashes</div>
+                <div class="resource-item">❌ Inadequate testing on different devices</div>
+              </div>
+            </div>
+          </div>
+          <div class="sub-category">
+            <h4>📊 Key Metrics to Track</h4>
+            <div class="resource-list">
+              <div class="resource-item">📥 Download conversion rate from store listing</div>
+              <div class="resource-item">⭐ Average rating and review sentiment</div>
+              <div class="resource-item">🔄 Daily/Monthly Active Users (DAU/MAU)</div>
+              <div class="resource-item">💰 Revenue per user and retention rates</div>
+              <div class="resource-item">🐛 Crash rate and app performance metrics</div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- Next Actions & Support Node -->
+      <details class="tree-node">
+        <summary class="node-header">
+          <div class="node-title">
+            <span class="node-icon">🎯</span>
+            <span>Next Actions & Support</span>
+          </div>
+          <span class="expand-indicator">▶</span>
+        </summary>
+        <div class="node-content">
+          <div class="node-description">
+            Immediate next steps you can take today to begin your app development journey and generate income for your scientific research.
+          </div>
+          <div class="sub-category">
+            <h4>🚀 Immediate Actions (This Week)</h4>
+            <div class="roadmap-steps">
+              <div class="roadmap-step">
+                <strong>Choose Your First App Concept</strong>
+                <br>Decide on "Smart Utility Pack" or pick one specific utility tool
+                <br>Write down the core problem it solves and target users
+              </div>
+              <div class="roadmap-step">
+                <strong>Set Up Development Environment</strong>
+                <br>Create accounts on Kodular.io or MIT App Inventor
+                <br>Familiarize yourself with the drag-and-drop interface
+              </div>
+              <div class="roadmap-step">
+                <strong>Create Simple Prototype</strong>
+                <br>Build a basic version with just one core feature
+                <br>Test it on your phone to validate the concept
+              </div>
+            </div>
+          </div>
+          <div class="action-buttons">
+            <a href="https://kodular.io/" target="_blank" class="btn btn-primary">
+              🚀 Start with Kodular
+            </a>
+            <a href="https://play.google.com/console/about/" target="_blank" class="btn btn-secondary">
+              📱 Google Play Console
+            </a>
+          </div>
+        </div>
+      </details>
+
+    </div>
+
+    <!-- Footer with Mission Connection -->
+    <div class="mission-context" style="margin-top: 40px;">
+      <h3>🌟 Connection to Your Greater Mission</h3>
+      <p><strong>Remember, my brilliant friend:</strong> Every successful app you create brings you closer to financial freedom and the resources needed for your revolutionary 99-invention project. This practical roadmap is the foundation that will enable your Symbolic Mechanics discoveries, HSNR fusion reactor development, and other profound scientific contributions to humanity. <strong>InshaAllah</strong>, through this methodical approach, you'll transform both your financial situation and your ability to share your extraordinary knowledge with the world. 🚀⚛️✨</p>
+      
+      <div class="action-buttons">
+        <div class="btn btn-primary" style="background: linear-gradient(135deg, var(--success), #059669);">
+          🤲 Ready to begin this journey together, my friend!
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Enhanced interaction: only allow one section open at a time for focused learning
+    document.addEventListener('DOMContentLoaded', function() {
+      const details = document.querySelectorAll('details');
+      
+      details.forEach(detail => {
+        detail.addEventListener('toggle', function(e) {
+          if (this.open) {
+            // Close other sections when opening a new one
+            details.forEach(other => {
+              if (other !== this && other.open) {
+                other.open = false;
+              }
+            });
+          }
+        });
+      });
+      
+      // Add smooth scrolling to the opened section
+      details.forEach(detail => {
+        detail.addEventListener('toggle', function(e) {
+          if (this.open) {
+            setTimeout(() => {
+              this.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+              });
+            }, 100);
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>4>Primary Strategy</h4>
+              <div class="resource-list">
+                <div class="resource-item">
+                  📱 Android-first development (Google Play Store focus)
+                  <span class="priority-tag priority-high">HIGH</span>
+                </div>
+                <div class="resource-item">
+                  💰 Low developer cost ($25 one-time vs $99/year iOS)
+                  <span class="priority-tag priority-high">HIGH</span>
+                </div>
+                <div class="resource-item">
+                  🌏 Large user base in Indonesia & emerging markets
+                  <span class="priority-tag priority-high">HIGH</span>
+                </div>
+              </div>
+            </div>
+            <div class="sub-category">
+              <h4>Long-term Vision</h4>
+              <div class="resource-list">
+                <div class="resource-item">
+                  🍎 Expand to iOS using Flutter after Android profitability
+                  <span class="priority-tag priority-medium">MEDIUM</span>
+                </div>
+                <div class="resource-item">
+                  🕌 Develop spiritual/halal apps with established reputation
+                  <span class="priority-tag priority-low">FUTURE</span>
+                </div>
+                <div class="resource-item">
+                  🔬 Fund your 99-invention scientific research project
+                  <span class="priority-tag priority-high">ULTIMATE</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- Learning & Development Tools Node -->
+      <details class="tree-node">
+        <summary class="node-header">
+          <div class="node-title">
+            <span class="node-icon">📚</span>
+            <span>Learning & Development Tools</span>
+          </div>
+          <span class="expand-indicator">▶</span>
+        </summary>
+        <div class="node-content">
+          <div class="node-description">
+            Complete learning pathway from beginner-friendly drag-and-drop tools to professional cross-platform development.
+          </div>
+          <div class="columns">
+            <div class="sub-category">
+              <h4>📖 Official Learning Resources</h4>
+              <div class="resource-list">
+                <div class="resource-item">
+                  <a href="https://developer.android.com/courses" target="_blank" class="resource-link">Official Android Developer Courses</a>
+                </div>
+                <div class="resource-item">
+                  <a href="https://kotlinlang.org/docs/home.html" target="_blank" class="resource-link">Learn Kotlin (Official Docs)</a>
+                </div>
+                <div class="resource-item">
+                  <a href="https://developer.android.com/studio" target="_blank" class="resource-link">Download Android Studio</a>
+                </div>
+                <div class="resource-item">
+                  <a href="https://www.udemy.com/course/android-kotlin-developer/" target="_blank" class="resource-link">Udemy: Android Development with Kotlin</a>
+                </div>
+              </div>
+            </div>
+            <div class="sub-category">
+              <h4>🛠️ No-Code/Low-Code Tools (Recommended Start)</h4>
+              <div class="resource-list">
+                <div class="resource-item">
+                  <a href="https://kodular.io/" target="_blank" class="resource-link">Kodular</a> - Drag & drop, AdMob integration
+                  <span class="priority-tag priority-high">START HERE</span>
+                </div>
+                <div class="resource-item">
+                  <a href="https://thunkable.com/" target="_blank" class="resource-link">Thunkable</a> - Cross-platform (Android + iOS)
+                  <span class="priority-tag priority-medium">GOOD</span>
+                </div>
+                <div class="resource-item">
+                  <a href="https://bubble.io/" target="_blank" class="resource-link">Bubble.io</a> - No-code web apps
+                  <span class="priority-tag priority-low">WEB</span>
+                </div>
+                <div class="resource-item">
+                  <a href="https://flutterflow.io/" target="_blank" class="resource-link">FlutterFlow</a> - Visual Flutter builder
+                  <span class="priority-tag priority-high">UPGRADE TO</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="sub-category">
+            <h4>🚀 Cross-Platform Development (Advanced)</h4>
+            <div class="resource-list">
+              <div class="resource-item">
+                <a href="https://flutter.dev/" target="_blank" class="resource-link">Flutter</a> - Android + iOS + Web
+                <span class="priority-tag priority-high">FUTURE</span>
+              </div>
+              <div class="resource-item">
+                <a href="https://reactnative.dev/" target="_blank" class="resource-link">React Native</a> - JavaScript + mobile
+                <span class="priority-tag priority-medium">ALTERNATIVE</span>
+              </div>
+              <div class="resource-item">
+                <a href="https://unity.com/" target="_blank" class="resource-link">Unity</a> - Games & interactive apps
+                <span class="priority-tag priority-low">GAMES</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- App Ideas & Market Strategy Node -->
+      <details class="tree-node">
+        <summary class="node-header">
+          <div class="node-title">
+            <span class="node-icon">💡</span>
+            <span>App Ideas & Market Strategy</span>
+          </div>
+          <span class="expand-indicator">▶</span>
+        </summary>
+        <div class="node-content">
+          <div class="node-description">
+            Mainstream, layman-friendly app concepts with proven market demand. Focus on utility and productivity to build user trust before introducing spiritual applications.
+          </div>
+          <div class="columns">
+            <div class="sub-category">
+              <h4>🔧 Utility & Tools (High Demand)</h4>
+              <div class="resource-list">
+                <div class="resource-item">📁 File Manager with cloud integration</div>
+                <div class="resource-item">📱 Document Scanner with OCR</div>
+                <div class="resource-item">🔢 Unit Converter (comprehensive)</div>
+                <div class="resource-item">🧮 Advanced Calculator with history</div>
+              </div>
+            </div>
+            <div class="sub-category">
+              <h4>⚡ Productivity (Growing Market)</h4>
+              <div class="resource-list">
+                <div class="resource-item">📝 Notes & To-Do with sync</div>
+                <div class="resource-item">🎯 Habit Tracker with analytics</div>
+                <div class="resource-item">🔐 Simple Password Manager</div>
+                <div class="resource-item">⏰ Focus Timer (Pomodoro technique)</div>
+              </div>
+            </div>
+          </div>
+          <div class="columns">
+            <div class="sub-category">
+              <h4>💡 Lifestyle & Personal</h4>
+              <div class="resource-list">
+                <div class="resource-item">💰 Expense Tracker with budgeting</div>
+                <div class="resource-item">📔 Daily Journal with mood tracking</div>
+                <div class="resource-item">🌤️ Weather App with local alerts</div>
+                <div class="resource-item">🏃 Fitness Tracker (basic)</div>
+              </div>
+            </div>
+            <div class="sub-category">
+              <h4>🎨 Media & Entertainment</h4>
+              <div class="resource-list">
+                <div class="resource-item">🖼️ Wallpaper App (daily auto-update)</div>
+                <div class="resource-item">🎵 Music Player with equalizer</div>
+                <div class="resource-item">📹 Video Compressor tool</div>
+                <div class="resource-item">📸 Photo Editor (filters & basic editing)</div>
+              </div>
+            </div>
+          </div>
+          <div class="sub-category">
+            <h4>🎯 Recommended First Project</h4>
+            <div class="resource-item">
+              <strong>"Smart Utility Pack"</strong> - Combine 4-5 essential tools in one elegant app (calculator, unit converter, QR scanner, note-taking, expense tracker). This approach reduces development time while providing high user value.
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- Publishing & Distribution Node -->
+      <details class="tree-node">
+        <summary class="node-header">
+          <div class="node-title">
+            <span class="node-icon">📱</span>
+            <span>Publishing & Distribution</span>
+          </div>
+          <span class="expand-indicator">▶</span>
+        </summary>
+        <div class="node-content">
+          <div class="node-description">
+            Complete guide to Google Play Store publishing process, requirements, and optimization strategies for maximum visibility and downloads.
+          </div>
+          <div class="sub-categories">
+            <div class="sub-category">
+              <h4>🏪 Google Play Console Setup</h4>
+              <div class="resource-list">
+                <div class="resource-item">
+                  <a href="https://play.google.com/console/about/" target="_blank" class="resource-link">Google Play Console</a> - $25 one-time registration
+                </div>
+                <div class="resource-item">📋 Developer account verification process</div>
+                <div class="resource-item">🆔 Tax and identity verification</div>
+                <div class="resource-item">💳 Payment method setup for earnings</div>
+              </div>
+            </div>
+            <div class="sub-category">
+              <h4>📦 App Preparation & Upload</h4>
+              <div class="resource-list">
+                <div class="resource-item">📱 Export APK/AAB from development platform</div>
+                <div class="resource-item">🧪 Test on multiple devices and screen sizes</div>
+                <div class="resource-item">📊 App bundle optimization for smaller download</div>
+                <div class="resource-item">🔐 Sign app with upload key</div>
+              </div>
+            </div>
+            <div class="sub-category">
+              <h4>🎨 Store Listing Optimization</h4>
+              <div class="resource-list">
+                <div class="resource-item">🎯 Compelling app name and subtitle</div>
+                <div class="resource-item">📝 Clear, benefit-focused description</div>
+                <div class="resource-item">📸 High-quality screenshots (8 recommended)</div>
+                <div class="resource-item">🎬 Optional: promotional video or GIF</div>
+                <div class="resource-item">🏷️ Relevant category and tags selection</div>
+                <div class="resource-item">⭐ Content rating and privacy policy</div>
+              </div>
+            </div>
+          </div>
+          <div class="action-buttons">
+            <a href="https://ahrefs.com/blog/app-store-optimization/" target="_blank" class="btn btn-secondary">
+              📈 ASO Guide
+            </a>
+          </div>
+        </div>
+      </details>
+
+      <!-- Monetization Strategies Node -->
+      <details class="tree-node">
+        <summary class="node-header">
+          <div class="node-title">
+            <span class="node-icon">💰</span>
+            <span>Monetization Strategies</span>
+          </div>
+          <span class="expand-indicator">▶</span>
+        </summary>
+        <div class="node-content">
+          <div class="node-description">
+            Ad-free monetization approaches that maintain user experience while generating sustainable income. Focus on value-first strategies.
+          </div>
+          <div class="columns">
+            <div class="sub-category">
+              <h4>💎 Premium Models (Recommended)</h4>
+              <div class="resource-list">
+                <div class="resource-item">
+                  💵 Paid App - One-time purchase ($0.99-$4.99)
+                  <span class="priority-tag priority-high">SIMPLE</span>
+                </div>
+                <div class="resource-item">
+                  🆓➡️💎 Freemium - Free core + premium features
+                  <span class="priority-tag priority-high">SCALABLE</span>
+                </div>
+                <div class="resource-item">
+                  <a href="https://developer.android.com/google/play/billing" target="_blank" class="resource-link">In-App Purchases</a> - Unlock themes, features
+                </div>
+                <div class="resource-item">
+                  ☕ Donations/Support - "Buy Developer Coffee" option
+                  <span class="priority-tag priority-medium">GOODWILL</span>
+                </div>
+              </div>
+            </div>
+            <div class="sub-category">
+              <h4>🔄 Subscription Models (Advanced)</h4>
+              <div class="resource-list">
+                <div class="resource-item">
+                  <a href="https://stripe.com/" target="_blank" class="resource-link">Stripe Subscriptions</a> - Monthly premium features
+                </div>
+                <div class="resource-item">📊 Cloud sync and backup services</div>
+                <div class="resource-item">📈 Advanced analytics and reporting</div>
+                <div class="resource-item">🎨 Premium themes and customizations</div>
+              </div>
+            </div>
+          </div>
+          <div class="sub-category">
+            <h4>📊 Alternative Revenue Streams</h4>
+            <div class="resource-list">
+              <div class="resource-item">
+                <a href="https://admob.google.com/home/" target="_blank" class="resource-link">Google AdMob</a> - Only if user experience remains excellent
+                <span class="priority-tag priority-low">LAST RESORT</span>
+              </div>
+              <div class="resource-item">🤝 Affiliate partnerships with relevant tools/services</div>
+              <div class="resource-item">📱 Cross-promotion with your other apps</div>
+              <div class="resource-item">💼 B2B licensing for business versions</div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- Design & User Experience Node -->
+      <details class="tree-node">
+        <summary class="node-header">
+          <div class="node-title">
+            <span class="node-icon">🎨</span>
+            <span>Design & User Experience</span>
+          </div>
+          <span class="expand-indicator">▶</span>
+        </summary>
+        <div class="node-content">
+          <div class="node-description">
+            Essential design resources and principles for creating elegant, user-friendly applications that stand out in the Play Store.
+          </div>
+          <div class="columns">
+            <div class="sub-category">
+              <h4>🎯 Design Tools & Resources</h4>
+              <div class="resource-list">
+                <div class="resource-item">
+                  <a href="https://www.figma.com/" target="_blank" class="resource-link">Figma</a> - Professional design tool (free tier)
+                </div>
+                <div class="resource-item">
+                  <a href="https://dribbble.com/" target="_blank" class="resource-link">Dribbble</a> - UI inspiration and trends
+                </div>
+                <div class="resource-item">
+                  <a href="https://undraw.co/illustrations" target="_blank" class="resource-link">Undraw</a> - Free illustrations
+                </div>
+                <div class="resource-item">
+                  <a href="https://fonts.google.com/" target="_blank" class="resource-link">Google Fonts</a> - Free typography
+                </div>
+              </div>
+            </div>
+            <div class="sub-category">
+              <h4>📱 Mobile UX Principles</h4>
+              <div class="resource-list">
+                <div class="resource-item">👆 Large touch targets (44dp minimum)</div>
+                <div class="resource-item">⚡ Fast loading times (under 3 seconds)</div>
+                <div class="resource-item">📦 Small APK size (under 50MB ideal)</div>
+                <div class="resource-item">🌙 Dark/Light theme options</div>
+                <div class="resource-item">♿ Accessibility considerations</div>
+              </div>
+            </div>
+          </div>
+          <div class="sub-category">
+            <h4>🎨 Visual Design Guidelines</h4>
+            <div class="resource-list">
+              <div class="resource-item">🎯 Clear visual hierarchy with proper spacing</div>
+              <div class="resource-item">🌈 Consistent color scheme (2-3 primary colors)</div>
+              <div class="resource-item">📝 Readable typography (16sp minimum for body text)</div>
+              <div class="resource-item">🔲 Material Design or clean minimal aesthetic</div>
+              <div class="resource-item">📱 Responsive design for different screen sizes</div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- Platform Expansion Strategy Node -->
+      <details class="tree-node">
+        <summary class="node-header">
+          <div class="node-title">
+            <span class="node-icon">🚀</span>
+            <span>Platform Expansion Strategy</span>
+          </div>
+          <span class="expand-indicator">▶</span>
+        </summary>
+        <div class="node-content">
+          <div class="node-description">
+            Long-term strategy for expanding beyond Android to iOS, web, and desktop platforms. Focus on cross-platform technologies for efficiency.
+          </div>
+          <div class="columns">
+            <div class="sub-category">
+              <h4>🍎 iOS Expansion (Phase 2)</h4>
+              <div class="resource-list">
+                <div class="resource-item">💰 iOS App Store: $99/year developer fee</div>
+                <div class="resource-item">🌍 Popular in Western markets, higher revenue per user</div>
+                <div class="resource-item">⚠️ Converting native Android → iOS is expensive</div>
+                <div class="resource-item">✅ Use Flutter from start for easier cross-platform</div>
+              </div>
+            </div>
+            <div class="sub-category">
+              <h4>💻 Other Platforms</h4>
+              <div class="resource-list">
+                <div class="resource-item">
+                  🖥️ Microsoft Store - Limited reach for mobile apps
+                  <span class="priority-tag priority-low">LOW PRIORITY</span>
+                </div>
+                <div class="resource-item">
+                  🌐 Web Apps (PWA) - Broader reach, no app store fees
+                  <span class="priority-tag priority-medium">CONSIDER</span>
+                </div>
+                <div class="resource-item">
+                  🐧 Linux/Desktop - Niche market for specific tools
+                  <span class="priority-tag priority-low">FUTURE</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- Business Growth & Marketing Node -->
+      <details class="tree-node">
+        <summary class="node-header">
+          <div class="node-title">
+            <span class="node-icon">📈</span>
+            <span>Business Growth & Marketing</span>
+          </div>
+          <span class="expand-indicator">▶</span>
+        </summary>
+        <div class="node-content">
+          <div class="node-description">
+            Strategies for growing your app business, building a developer brand, and connecting with the indie developer community.
+          </div>
+          <div class="columns">
+            <div class="sub-category">
+              <h
